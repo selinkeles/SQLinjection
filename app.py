@@ -1,11 +1,14 @@
 # .\venv\Scripts\activate
 # python -m flask --app .\app.py run
-from flask import Flask, jsonify, redirect, request
+from flask import Flask, jsonify, redirect, request, Response
+import requests
 import sqlite3
 import random
 import string
+import time
+import logging
 from flask import render_template, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 # from flask_login import UserMixin
 
 app = Flask(__name__)
@@ -32,16 +35,16 @@ filepath = "instance\database.db"
 posts = []
 connection = sqlite3.connect(filepath)
 cursor = connection.cursor()
-for i in range(1000):
-    random_content = ''.join(random.choices(
-        string.ascii_letters + string.digits, k=8))
-    posts.append(
-        {'post_id': i, 'post_content': random_content}
-    )
-    query = "INSERT OR REPLACE INTO posts VALUES({id},'{text}')".format(
-        id=i, text=random_content)
-    cursor.execute(query)
-    connection.commit()
+# for i in range(1000):
+#     random_content = ''.join(random.choices(
+#         string.ascii_letters + string.digits, k=8))
+#     posts.append(
+#         {'post_id': i, 'post_content': random_content}
+#     )
+#     query = "INSERT OR REPLACE INTO posts VALUES({id},'{text}')".format(
+#         id=i, text=random_content)
+#     cursor.execute(query)
+#     connection.commit()
 
 users = [
     {
@@ -55,6 +58,26 @@ def home():
     title = "Welcome"
 
     return render_template('home.html', title=title)
+
+
+
+# set up logging
+logging.basicConfig(filename='request_logs.txt', level=logging.INFO)
+
+@app.before_request
+def log_request_data():
+    """Logs the request data."""
+    logging.info('{} {}'.format(request.method, request.url))
+
+@app.after_request
+def log_response_data(response):
+    """Logs the response data."""
+    logging.info('Response status: {}'.format(response.status_code))
+    logging.info('Response data: {}'.format(response.data))
+    return response
+
+
+
 
 
 @app.route("/api/posts", methods=['GET'])
@@ -78,17 +101,27 @@ def result():
     return jsonify(post)
 
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     title = "Login"
     if request.method == 'POST':
+        connection = sqlite3.connect(filepath)
+        cursor = connection.cursor()
         email = request.form["email"]
         password = request.form["password"]
-        user = {'email': email, 'password': password}
-        if user in users:
+        cursor.execute("SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
+        user = cursor.fetchone()
+        if user:
+            user = {'email': email, 'password': password}
+            connection.commit()
+            connection.close()
             return redirect(url_for('user', usr=user))
-
-        return render_template('login.html', title=title)
+        else:
+            # credentials not found in database
+            connection.commit()
+            connection.close()
+            return render_template('login.html', title=title, error='Invalid email or password')
     else:
         return render_template('login.html', title=title)
 
