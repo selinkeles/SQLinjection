@@ -61,20 +61,20 @@ def home():
 def result():
     connection = sqlite3.connect(filepath)
     cursor = connection.cursor()
-    query1 = "SELECT * FROM posts"
-    post = cursor.execute(query1)
-    post = post.fetchall()
-    return jsonify(post)
-
-
-@app.route("/api/posts?post_id=<int:post_id>", methods=['GET'])
-def getPost(post_id):
-    connection = sqlite3.connect(filepath)
-    cursor = connection.cursor()
     post_id = request.args.get("post_id")
-    query1 = "SELECT * FROM posts WHERE post_id = ?"
-    post = cursor.execute(query1, (post_id,))
-    post = post.fetchall()
+    if post_id is None:
+        query = "SELECT * FROM posts"
+        post = cursor.execute(query)
+        post = post.fetchall()
+        return jsonify(post)
+    try:
+        query = "SELECT * FROM posts WHERE post_id=?"
+        post = cursor.execute(query, (post_id,))
+        post = post.fetchall()
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    finally:
+        connection.close()
     return jsonify(post)
 
 
