@@ -78,8 +78,6 @@ def log_response_data(response):
 
 
 
-
-
 # @app.route("/api/posts", methods=['GET'])
 # def result():
 #     connection = sqlite3.connect(filepath)
@@ -90,14 +88,11 @@ def log_response_data(response):
 #         post = cursor.execute(query)
 #         post = post.fetchall()
 #         return jsonify(post)
-#     try:
-#         query = "SELECT * FROM posts WHERE post_id='%s'" % post_id
-#         post = cursor.executescript(query)
-#         post = post.fetchall()
-#     except Exception as e:
-#         return jsonify({'error': str(e)})
-#     finally:
-#         connection.close()
+#     # remove try-except block and finally block
+#     query = "SELECT * FROM posts WHERE post_id=%s" % post_id
+#     search_query = cursor.execute(query)
+#     post = search_query.fetchall()
+#     connection.close()
 #     return jsonify(post)
 
 @app.route("/api/posts", methods=['GET'])
@@ -110,11 +105,14 @@ def result():
         post = cursor.execute(query)
         post = post.fetchall()
         return jsonify(post)
-    # remove try-except block and finally block
-    query = "SELECT * FROM posts WHERE post_id=%s" % post_id
-    search_query = cursor.execute(query)
-    post = search_query.fetchall()
-    connection.close()
+    try:
+        post = cursor.execute(
+            "SELECT * FROM posts WHERE post_id=?", (post_id))
+        post = post.fetchall()
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    finally:
+        connection.close()
     return jsonify(post)
 
 
@@ -126,7 +124,7 @@ def login():
         cursor = connection.cursor()
         email = request.form["email"]
         password = request.form["password"]
-        cursor.execute("SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
+        cursor.execute("SELECT * FROM users WHERE email = ? AND password = ? ", (email, password))
         user = cursor.fetchone()
         if user:
             user = {'email': email, 'password': password}
