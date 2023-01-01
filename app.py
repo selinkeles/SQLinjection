@@ -80,6 +80,26 @@ def log_response_data(response):
 
 
 
+# @app.route("/api/posts", methods=['GET'])
+# def result():
+#     connection = sqlite3.connect(filepath)
+#     cursor = connection.cursor()
+#     post_id = request.args.get("post_id")
+#     if post_id is None:
+#         query = "SELECT * FROM posts"
+#         post = cursor.execute(query)
+#         post = post.fetchall()
+#         return jsonify(post)
+#     try:
+#         query = "SELECT * FROM posts WHERE post_id='%s'" % post_id
+#         post = cursor.executescript(query)
+#         post = post.fetchall()
+#     except Exception as e:
+#         return jsonify({'error': str(e)})
+#     finally:
+#         connection.close()
+#     return jsonify(post)
+
 @app.route("/api/posts", methods=['GET'])
 def result():
     connection = sqlite3.connect(filepath)
@@ -90,16 +110,12 @@ def result():
         post = cursor.execute(query)
         post = post.fetchall()
         return jsonify(post)
-    try:
-        query = "SELECT * FROM posts WHERE post_id=?"
-        post = cursor.execute(query, (post_id,))
-        post = post.fetchall()
-    except Exception as e:
-        return jsonify({'error': str(e)})
-    finally:
-        connection.close()
+    # remove try-except block and finally block
+    query = "SELECT * FROM posts WHERE post_id=%s" % post_id
+    search_query = cursor.execute(query)
+    post = search_query.fetchall()
+    connection.close()
     return jsonify(post)
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
