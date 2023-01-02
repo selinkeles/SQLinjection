@@ -76,14 +76,6 @@ def log_response_data(response):
     logging.info('Response data: {}'.format(response.data))
     return response
 
-
-# Public Shared blackList As String() = {"--", ";--", ";", "/*", "*/", "@@", _
-#                                                "@", "char", "nchar", "varchar", "nvarchar", "alter", _
-#                                                "begin", "cast", "create", "cursor", "declare", "delete", _
-#                                                "drop", "end", "exec", "execute", "fetch", "insert", _
-#                                                "kill", "open", "select", "sys", "sysobjects", "syscolumns", _
-#                                                "table", "update"}
-
 blaclistedPost= ["--", ";--", ";", "/*", "*/", "@@", "@", "char", "nchar", "varchar", "nvarchar", "alter", "begin", "cast", "create", "cursor", "declare", "delete", 
                                                "drop", "end", "exec", "execute", "fetch", "insert",
                                                "kill", "open", "select", "sys", "sysobjects", "syscolumns",
