@@ -77,31 +77,23 @@ def log_response_data(response):
     return response
 
 
+# Public Shared blackList As String() = {"--", ";--", ";", "/*", "*/", "@@", _
+#                                                "@", "char", "nchar", "varchar", "nvarchar", "alter", _
+#                                                "begin", "cast", "create", "cursor", "declare", "delete", _
+#                                                "drop", "end", "exec", "execute", "fetch", "insert", _
+#                                                "kill", "open", "select", "sys", "sysobjects", "syscolumns", _
+#                                                "table", "update"}
 
+blaclistedPost= ["--", ";--", ";", "/*", "*/", "@@", "@", "char", "nchar", "varchar", "nvarchar", "alter", "begin", "cast", "create", "cursor", "declare", "delete", 
+                                               "drop", "end", "exec", "execute", "fetch", "insert",
+                                               "kill", "open", "select", "sys", "sysobjects", "syscolumns",
+                                                "table", "update","%"," ","or","and","+","*","\"", "\'", "=","?"]
 
-
-# @app.route("/api/posts", methods=['GET'])
-# def result():
-#     connection = sqlite3.connect(filepath)
-#     cursor = connection.cursor()
-#     post_id = request.args.get("post_id")
-#     if post_id is None:
-#         query = "SELECT * FROM posts"
-#         post = cursor.execute(query)
-#         post = post.fetchall()
-#         return jsonify(post)
-#     try:
-#         query = "SELECT * FROM posts WHERE post_id='%s'" % post_id
-#         post = cursor.executescript(query)
-#         post = post.fetchall()
-#     except Exception as e:
-#         return jsonify({'error': str(e)})
-#     finally:
-#         connection.close()
-#     return jsonify(post)
+blaclistedLogin= ["--", ";--", ";", "/*", "*/", "@@", " ","+", "\"", "\'", "=","?"]
 
 @app.route("/api/posts", methods=['GET'])
 def result():
+    pure = True
     connection = sqlite3.connect(filepath)
     cursor = connection.cursor()
     post_id = request.args.get("post_id")
@@ -110,34 +102,55 @@ def result():
         post = cursor.execute(query)
         post = post.fetchall()
         return jsonify(post)
-    # remove try-except block and finally block
-    query = "SELECT * FROM posts WHERE post_id=%s" % post_id
-    search_query = cursor.execute(query)
-    post = search_query.fetchall()
-    connection.close()
-    return jsonify(post)
+    post_id.lower()
+    for item in blaclistedPost:
+        if item in post_id:
+            pure = False
+            break
+    if pure:
+        query = "SELECT * FROM posts WHERE post_id=%s" % post_id
+        search_query = cursor.execute(query)
+        post = search_query.fetchall()
+        connection.close()
+        return jsonify(post)
+    else:
+        errorMsg = "ERROR!!"
+        return errorMsg
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    pure = True
     title = "Login"
     if request.method == 'POST':
         connection = sqlite3.connect(filepath)
         cursor = connection.cursor()
         email = request.form["email"]
+        if email != None:
+            email.lower()
         password = request.form["password"]
-        cursor.execute("SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
-        user = cursor.fetchone()
-        if user:
-            user = {'email': email, 'password': password}
-            connection.commit()
-            connection.close()
-            return redirect(url_for('user', usr=user))
+        if password != None:
+            password.lower()
+        for item in blaclistedLogin:
+            if item in email:
+                pure = False
+            elif item in password:
+                pure = False
+        if pure:
+            cursor.execute("SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
+            user = cursor.fetchone()
+            if user:
+                user = {'email': email, 'password': password}
+                connection.commit()
+                connection.close()
+                return redirect(url_for('user', usr=user))
+            else:
+                # credentials not found in database
+                connection.commit()
+                connection.close()
+                return render_template('login.html', title=title, error='Invalid email or password')
         else:
-            # credentials not found in database
-            connection.commit()
-            connection.close()
-            return render_template('login.html', title=title, error='Invalid email or password')
+            return "ERROR!!"
     else:
         return render_template('login.html', title=title)
 
