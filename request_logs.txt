@@ -1068,3 +1068,67 @@ INFO:werkzeug: * Detected change in 'D:\\CS437\\project\\SQLinjection\\app.py', 
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 343-085-094
+INFO:root:POST http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'ERROR!!'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:35] "POST /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:35] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Login form design</title>\n    <style>\n        *{\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body{\n            min-height: 100vh;\n            background: #eee;\n            display: flex;\n            font-family: sans-serif;\n        }\n        .container{\n            margin: auto;\n            width: 500px;\n            max-width: 90%;\n        }\n        .container form{\n            width: 100%;\n            height: 100%;\n            padding: 20px;\n            background: white;\n            border-radius: 4px;\n            box-shadow: 0 8px 16px rgba(0,0,0,.3);\n        }\n        .container form h1{\n            text-align: center;\n            margin-bottom: 24px;\n            color: #222;\n        }\n        .container form .form-control{\n            width: 100%;\n            height: 40px;\n            background: white;\n            border-radius: 4px;\n            border: 1px solid silver;\n            margin: 10px 0 18px 0;\n            padding: 0 10px;\n        }\n        .container form .btn{\n            margin-left: 50%;\n            transform: translate(-50%);\n            width: 120px;\n            height: 34px;\n            border: none;\n            outline: none;\n            background: rgb(135, 50, 50);\n            cursor: pointer;\n            font-size: 16px;\n            text-transform: uppercase;\n            color: white;\n            border-radius: 4px;\n            transition: .3s;\n        }\n        .container form .btn:hover{\n            opacity: .7;\n        }\n\n    </style>\n</head>\n<body>\n    <div class="container">\n        <form method="POST" action="">\n            <h1>Login</h1>\n            <div class="form-group">\n                <label for="">Email</label>\n                <input type="text" name="email" class="form-control" required>\n            </div>\n            <div class="form-group">\n                <label for="">Password</label>\n                <input type="password" name="password" class="form-control">\n            </div>\n            <input type="submit" class="btn" value="Login">\n        </form>\n    </div>\n</body>\n</html>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:37] "GET /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:37] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:POST http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'ERROR!!'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:41] "POST /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:41] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Login form design</title>\n    <style>\n        *{\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body{\n            min-height: 100vh;\n            background: #eee;\n            display: flex;\n            font-family: sans-serif;\n        }\n        .container{\n            margin: auto;\n            width: 500px;\n            max-width: 90%;\n        }\n        .container form{\n            width: 100%;\n            height: 100%;\n            padding: 20px;\n            background: white;\n            border-radius: 4px;\n            box-shadow: 0 8px 16px rgba(0,0,0,.3);\n        }\n        .container form h1{\n            text-align: center;\n            margin-bottom: 24px;\n            color: #222;\n        }\n        .container form .form-control{\n            width: 100%;\n            height: 40px;\n            background: white;\n            border-radius: 4px;\n            border: 1px solid silver;\n            margin: 10px 0 18px 0;\n            padding: 0 10px;\n        }\n        .container form .btn{\n            margin-left: 50%;\n            transform: translate(-50%);\n            width: 120px;\n            height: 34px;\n            border: none;\n            outline: none;\n            background: rgb(135, 50, 50);\n            cursor: pointer;\n            font-size: 16px;\n            text-transform: uppercase;\n            color: white;\n            border-radius: 4px;\n            transition: .3s;\n        }\n        .container form .btn:hover{\n            opacity: .7;\n        }\n\n    </style>\n</head>\n<body>\n    <div class="container">\n        <form method="POST" action="">\n            <h1>Login</h1>\n            <div class="form-group">\n                <label for="">Email</label>\n                <input type="text" name="email" class="form-control" required>\n            </div>\n            <div class="form-group">\n                <label for="">Password</label>\n                <input type="password" name="password" class="form-control">\n            </div>\n            <input type="submit" class="btn" value="Login">\n        </form>\n    </div>\n</body>\n</html>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:44] "GET /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:44] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:POST http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'ERROR!!'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:53] "POST /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:53] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Login form design</title>\n    <style>\n        *{\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body{\n            min-height: 100vh;\n            background: #eee;\n            display: flex;\n            font-family: sans-serif;\n        }\n        .container{\n            margin: auto;\n            width: 500px;\n            max-width: 90%;\n        }\n        .container form{\n            width: 100%;\n            height: 100%;\n            padding: 20px;\n            background: white;\n            border-radius: 4px;\n            box-shadow: 0 8px 16px rgba(0,0,0,.3);\n        }\n        .container form h1{\n            text-align: center;\n            margin-bottom: 24px;\n            color: #222;\n        }\n        .container form .form-control{\n            width: 100%;\n            height: 40px;\n            background: white;\n            border-radius: 4px;\n            border: 1px solid silver;\n            margin: 10px 0 18px 0;\n            padding: 0 10px;\n        }\n        .container form .btn{\n            margin-left: 50%;\n            transform: translate(-50%);\n            width: 120px;\n            height: 34px;\n            border: none;\n            outline: none;\n            background: rgb(135, 50, 50);\n            cursor: pointer;\n            font-size: 16px;\n            text-transform: uppercase;\n            color: white;\n            border-radius: 4px;\n            transition: .3s;\n        }\n        .container form .btn:hover{\n            opacity: .7;\n        }\n\n    </style>\n</head>\n<body>\n    <div class="container">\n        <form method="POST" action="">\n            <h1>Login</h1>\n            <div class="form-group">\n                <label for="">Email</label>\n                <input type="text" name="email" class="form-control" required>\n            </div>\n            <div class="form-group">\n                <label for="">Password</label>\n                <input type="password" name="password" class="form-control">\n            </div>\n            <input type="submit" class="btn" value="Login">\n        </form>\n    </div>\n</body>\n</html>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:56] "GET /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:03:56] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:POST http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'ERROR!!'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:15:34] "POST /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:15:34] "GET /favicon.ico HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/login
+INFO:root:Response status: 200
+INFO:root:Response data: b'<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Login form design</title>\n    <style>\n        *{\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body{\n            min-height: 100vh;\n            background: #eee;\n            display: flex;\n            font-family: sans-serif;\n        }\n        .container{\n            margin: auto;\n            width: 500px;\n            max-width: 90%;\n        }\n        .container form{\n            width: 100%;\n            height: 100%;\n            padding: 20px;\n            background: white;\n            border-radius: 4px;\n            box-shadow: 0 8px 16px rgba(0,0,0,.3);\n        }\n        .container form h1{\n            text-align: center;\n            margin-bottom: 24px;\n            color: #222;\n        }\n        .container form .form-control{\n            width: 100%;\n            height: 40px;\n            background: white;\n            border-radius: 4px;\n            border: 1px solid silver;\n            margin: 10px 0 18px 0;\n            padding: 0 10px;\n        }\n        .container form .btn{\n            margin-left: 50%;\n            transform: translate(-50%);\n            width: 120px;\n            height: 34px;\n            border: none;\n            outline: none;\n            background: rgb(135, 50, 50);\n            cursor: pointer;\n            font-size: 16px;\n            text-transform: uppercase;\n            color: white;\n            border-radius: 4px;\n            transition: .3s;\n        }\n        .container form .btn:hover{\n            opacity: .7;\n        }\n\n    </style>\n</head>\n<body>\n    <div class="container">\n        <form method="POST" action="">\n            <h1>Login</h1>\n            <div class="form-group">\n                <label for="">Email</label>\n                <input type="text" name="email" class="form-control" required>\n            </div>\n            <div class="form-group">\n                <label for="">Password</label>\n                <input type="password" name="password" class="form-control">\n            </div>\n            <input type="submit" class="btn" value="Login">\n        </form>\n    </div>\n</body>\n</html>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:15:36] "GET /login HTTP/1.1" 200 -
+INFO:root:GET http://127.0.0.1:5000/favicon.ico
+INFO:root:Response status: 200
+INFO:root:Response data: b'<h1>favicon.ico</h1>'
+INFO:werkzeug:127.0.0.1 - - [02/Jan/2023 23:15:36] "GET /favicon.ico HTTP/1.1" 200 -
