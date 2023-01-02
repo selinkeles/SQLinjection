@@ -76,25 +76,6 @@ def log_response_data(response):
     logging.info('Response data: {}'.format(response.data))
     return response
 
-
-
-# @app.route("/api/posts", methods=['GET'])
-# def result():
-#     connection = sqlite3.connect(filepath)
-#     cursor = connection.cursor()
-#     post_id = request.args.get("post_id")
-#     if post_id is None:
-#         query = "SELECT * FROM posts"
-#         post = cursor.execute(query)
-#         post = post.fetchall()
-#         return jsonify(post)
-#     # remove try-except block and finally block
-#     query = "SELECT * FROM posts WHERE post_id=%s" % post_id
-#     search_query = cursor.execute(query)
-#     post = search_query.fetchall()
-#     connection.close()
-#     return jsonify(post)
-
 @app.route("/api/posts", methods=['GET'])
 def result():
     connection = sqlite3.connect(filepath)
