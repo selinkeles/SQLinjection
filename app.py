@@ -1,5 +1,3 @@
-# .\venv\Scripts\activate
-# python -m flask --app .\app.py run
 from flask import Flask, jsonify, redirect, request, Response
 import requests
 import sqlite3
@@ -8,33 +6,17 @@ import string
 import time
 import logging
 from flask import render_template, url_for, redirect
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_login import UserMixin
 
+# CREATE APP
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-# #app.config['SECRET_KEY'] = 'thisisasecretkey'
-# db = SQLAlchemy(app)
+# SPECIFY DATABASE PATH
 filepath = "instance\database.db"
-
-
-# class User(db.Model,UserMixin):
-#     id = db.Column(db.Integer, primary_key=True)
-#     email = db.Column(db.String(80), nullable=False)
-#     password = db.Column(db.String(80), nullable=False)
-
-
-# class Posts(db.Model):
-#     post_id = db.Column(db.Integer, primary_key=True)
-#     post_content = db.Column(db.String(80), nullable=False)
-
-#     def __init__(self,post_content):
-#         self.post_content = post_content
-
-
-posts = []
+# DATABASE CONNECTION
 connection = sqlite3.connect(filepath)
 cursor = connection.cursor()
+
+# FOR CREATING RANDOM 1000 POSTS
+# EXECUTED ONLY ONCE
 # for i in range(1000):
 #     random_content = ''.join(random.choices(
 #         string.ascii_letters + string.digits, k=8))
@@ -46,13 +28,8 @@ cursor = connection.cursor()
 #     cursor.execute(query)
 #     connection.commit()
 
-users = [
-    {
-        'email': 'selin@selin.com', 'password': '1234'
-    }
-]
 
-
+# HOME ROUTE
 @app.route("/")
 def home():
     title = "Welcome"
@@ -60,14 +37,15 @@ def home():
     return render_template('home.html', title=title)
 
 
-
-# set up logging
+# SET UP LOGGING
 logging.basicConfig(filename='request_logs.txt', level=logging.INFO)
+
 
 @app.before_request
 def log_request_data():
     """Logs the request data."""
     logging.info('{} {}'.format(request.method, request.url))
+
 
 @app.after_request
 def log_response_data(response):
@@ -75,31 +53,10 @@ def log_response_data(response):
     logging.info('Response status: {}'.format(response.status_code))
     logging.info('Response data: {}'.format(response.data))
     return response
+# END LOGGING
 
 
-
-
-
-# @app.route("/api/posts", methods=['GET'])
-# def result():
-#     connection = sqlite3.connect(filepath)
-#     cursor = connection.cursor()
-#     post_id = request.args.get("post_id")
-#     if post_id is None:
-#         query = "SELECT * FROM posts"
-#         post = cursor.execute(query)
-#         post = post.fetchall()
-#         return jsonify(post)
-#     try:
-#         query = "SELECT * FROM posts WHERE post_id='%s'" % post_id
-#         post = cursor.executescript(query)
-#         post = post.fetchall()
-#     except Exception as e:
-#         return jsonify({'error': str(e)})
-#     finally:
-#         connection.close()
-#     return jsonify(post)
-
+# POST API
 @app.route("/api/posts", methods=['GET'])
 def result():
     connection = sqlite3.connect(filepath)
@@ -107,26 +64,35 @@ def result():
     post_id = request.args.get("post_id")
     if post_id is None:
         query = "SELECT * FROM posts"
-        post = cursor.execute(query)
-        post = post.fetchall()
-        return jsonify(post)
-    # remove try-except block and finally block
+        results = cursor.execute(query)
+        results = results.fetchall()
+        posts = []
+        for post in results:
+            posts.append(post)
+        return render_template('posts.html', posts=posts)
+        # return jsonify(results)
+    # Vulnerable code starts here
     query = "SELECT * FROM posts WHERE post_id=%s" % post_id
     search_query = cursor.execute(query)
     post = search_query.fetchall()
     connection.close()
-    return jsonify(post)
+    # return jsonify(post)
+    return render_template('posts.html', posts=post)
 
 
+# LOGIN API
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     title = "Login"
+    # When method is post, submit request
     if request.method == 'POST':
         connection = sqlite3.connect(filepath)
         cursor = connection.cursor()
         email = request.form["email"]
         password = request.form["password"]
-        cursor.execute("SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
+        # Vulnerable code starts here
+        cursor.execute(
+            "SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
         user = cursor.fetchone()
         if user:
             user = {'email': email, 'password': password}
@@ -138,6 +104,7 @@ def login():
             connection.commit()
             connection.close()
             return render_template('login.html', title=title, error='Invalid email or password')
+    # When method is get, render login page
     else:
         return render_template('login.html', title=title)
 
