@@ -53,6 +53,7 @@ users = [
 ]
 
 
+
 # Create a blacklist of potentially malicious strings
 blacklist = [";", "--", "\"", "\'", ";--", "/*", "*/", "@@",
                 "@", "char", "nchar", "varchar", "nvarchar", "alter",
