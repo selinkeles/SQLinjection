@@ -1,5 +1,3 @@
-# .\venv\Scripts\activate
-# python -m flask --app .\app.py run
 from flask import Flask, jsonify, redirect, request, Response
 import requests
 import sqlite3
@@ -8,33 +6,17 @@ import string
 import time
 import logging
 from flask import render_template, url_for, redirect
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_login import UserMixin
 
+# CREATE APP
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-# #app.config['SECRET_KEY'] = 'thisisasecretkey'
-# db = SQLAlchemy(app)
+# SPECIFY DATABASE PATH
 filepath = "instance\database.db"
-
-
-# class User(db.Model,UserMixin):
-#     id = db.Column(db.Integer, primary_key=True)
-#     email = db.Column(db.String(80), nullable=False)
-#     password = db.Column(db.String(80), nullable=False)
-
-
-# class Posts(db.Model):
-#     post_id = db.Column(db.Integer, primary_key=True)
-#     post_content = db.Column(db.String(80), nullable=False)
-
-#     def __init__(self,post_content):
-#         self.post_content = post_content
-
-
-posts = []
+# DATABASE CONNECTION
 connection = sqlite3.connect(filepath)
 cursor = connection.cursor()
+
+# FOR CREATING RANDOM 1000 POSTS
+# EXECUTED ONLY ONCE
 # for i in range(1000):
 #     random_content = ''.join(random.choices(
 #         string.ascii_letters + string.digits, k=8))
@@ -46,13 +28,8 @@ cursor = connection.cursor()
 #     cursor.execute(query)
 #     connection.commit()
 
-users = [
-    {
-        'email': 'selin@selin.com', 'password': '1234'
-    }
-]
 
-
+# HOME ROUTE
 @app.route("/")
 def home():
     title = "Welcome"
@@ -60,14 +37,15 @@ def home():
     return render_template('home.html', title=title)
 
 
-
-# set up logging
+# SET UP LOGGING
 logging.basicConfig(filename='request_logs.txt', level=logging.INFO)
+
 
 @app.before_request
 def log_request_data():
     """Logs the request data."""
     logging.info('{} {}'.format(request.method, request.url))
+
 
 @app.after_request
 def log_response_data(response):
@@ -75,22 +53,21 @@ def log_response_data(response):
     logging.info('Response status: {}'.format(response.status_code))
     logging.info('Response data: {}'.format(response.data))
     return response
+# END LOGGING
 
 
-# Public Shared blackList As String() = {"--", ";--", ";", "/*", "*/", "@@", _
-#                                                "@", "char", "nchar", "varchar", "nvarchar", "alter", _
-#                                                "begin", "cast", "create", "cursor", "declare", "delete", _
-#                                                "drop", "end", "exec", "execute", "fetch", "insert", _
-#                                                "kill", "open", "select", "sys", "sysobjects", "syscolumns", _
-#                                                "table", "update"}
+# BLACKLIST ITEMS FOR POSTS
+blaclistedPost = ["--", ";--", ";", "/*", "*/", "@@", "@", "char", "nchar", "varchar", "nvarchar", "alter", "begin", "cast", "create", "cursor", "declare", "delete",
+                  "drop", "end", "exec", "execute", "fetch", "insert",
+                  "kill", "open", "select", "sys", "sysobjects", "syscolumns",
+                                                "table", "update", "%", " ", "or", "and", "+", "*", "\"", "\'", "=", "?"]
 
-blaclistedPost= ["--", ";--", ";", "/*", "*/", "@@", "@", "char", "nchar", "varchar", "nvarchar", "alter", "begin", "cast", "create", "cursor", "declare", "delete", 
-                                               "drop", "end", "exec", "execute", "fetch", "insert",
-                                               "kill", "open", "select", "sys", "sysobjects", "syscolumns",
-                                                "table", "update","%"," ","or","and","+","*","\"", "\'", "=","?"]
+# BLACKLIST ITEMS FOR LOGIN
+blaclistedLogin = ["--", ";--", ";", "/*",
+                   "*/", "@@", " ", "+", "\"", "\'", "=", "?"]
 
-blaclistedLogin= ["--", ";--", ";", "/*", "*/", "@@", " ","+", "\"", "\'", "=","?"]
 
+# POST API
 @app.route("/api/posts", methods=['GET'])
 def result():
     pure = True
@@ -99,10 +76,12 @@ def result():
     post_id = request.args.get("post_id")
     if post_id is None:
         query = "SELECT * FROM posts"
-        post = cursor.execute(query)
-        post = post.fetchall()
-        return jsonify(post)
+        results = cursor.execute(query)
+        results = results.fetchall()
+        return render_template('posts.html', posts=results)
+        # return jsonify(results)
     post_id.lower()
+    # Use of blacklist protection starts here
     for item in blaclistedPost:
         if item in post_id:
             pure = False
@@ -112,16 +91,19 @@ def result():
         search_query = cursor.execute(query)
         post = search_query.fetchall()
         connection.close()
-        return jsonify(post)
+        # return jsonify(post)
+        return render_template('posts.html', posts=post)
     else:
         errorMsg = "ERROR!!"
         return errorMsg
 
 
+# LOGIN API
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     pure = True
     title = "Login"
+    # When method is post, submit request
     if request.method == 'POST':
         connection = sqlite3.connect(filepath)
         cursor = connection.cursor()
@@ -131,13 +113,15 @@ def login():
         password = request.form["password"]
         if password != None:
             password.lower()
+        # Use of blacklist protection starts here
         for item in blaclistedLogin:
             if item in email:
                 pure = False
             elif item in password:
                 pure = False
         if pure:
-            cursor.execute("SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
+            cursor.execute(
+                "SELECT * FROM users WHERE email = '%s'AND password = '%s'" % (email, password))
             user = cursor.fetchone()
             if user:
                 user = {'email': email, 'password': password}
@@ -151,6 +135,7 @@ def login():
                 return render_template('login.html', title=title, error='Invalid email or password')
         else:
             return "ERROR!!"
+    # When method is get, render login page
     else:
         return render_template('login.html', title=title)
 
